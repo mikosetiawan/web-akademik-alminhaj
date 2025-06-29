@@ -24,7 +24,7 @@
                     <p class="text-3xl font-bold text-gray-900">{{ number_format($totalTeachers) }}</p>
                     <p class="text-sm text-blue-600 flex items-center mt-1">
                         <i class="fas fa-equals mr-1"></i>
-                        Stabil
+                        All Mapel
                     </p>
                 </div>
                 <div class="bg-green-100 p-3 rounded-full">
@@ -40,7 +40,7 @@
                     <p class="text-3xl font-bold text-gray-900">{{ number_format($activeClasses) }}</p>
                     <p class="text-sm text-purple-600 flex items-center mt-1">
                         <i class="fas fa-check mr-1"></i>
-                        Semua berjalan
+                        Sedang berjalan
                     </p>
                 </div>
                 <div class="bg-purple-100 p-3 rounded-full">
@@ -158,23 +158,31 @@
 
                 <!-- Calendar Widget -->
                 <div class="mt-6">
-                    <h4 class="font-semibold text-gray-800 mb-3">Jadwal Hari Ini</h4>
+                    <h4 class="font-semibold text-gray-800 mb-3">Jadwal Hari Ini ({{ now()->format('l') }})</h4>
                     <div class="bg-gray-50 rounded-lg p-4">
                         <div class="text-center mb-4">
                             <p class="text-2xl font-bold text-gray-800">{{ now()->format('d') }}</p>
                             <p class="text-sm text-gray-600">{{ now()->format('F Y - l') }}</p>
                         </div>
-                        <div class="space-y-2">
+                        <div class="space-y-2 max-h-48 overflow-y-auto">
                             @forelse($todaySchedule as $schedule)
-                                <div class="flex items-center space-x-2 text-sm">
-                                    <i class="fas fa-clock text-blue-600"></i>
-                                    <span class="text-gray-600">
-                                        {{ $schedule->start_time }} - {{ $schedule->class }}
-                                    </span>
+                                <div class="flex items-start space-x-2 text-sm bg-white p-2 rounded">
+                                    <i class="fas fa-clock text-blue-600 mt-1"></i>
+                                    <div class="flex-1">
+                                        <div class="font-medium text-gray-800">
+                                            {{ $schedule->start_time }} - {{ $schedule->end_time }}
+                                        </div>
+                                        <div class="text-gray-600">
+                                            {{ $schedule->subject->name }} 
+                                        </div>
+                                        <div class="text-xs text-gray-500">
+                                            {{ $schedule->teacher->name }} • {{ $schedule->classroom }}
+                                        </div>
+                                    </div>
                                 </div>
                             @empty
-                                <div class="text-center text-gray-500 text-sm">
-                                    <i class="fas fa-calendar-times mb-1"></i>
+                                <div class="text-center text-gray-500 text-sm py-4">
+                                    <i class="fas fa-calendar-times text-2xl mb-2"></i>
                                     <p>Tidak ada jadwal hari ini</p>
                                 </div>
                             @endforelse
@@ -193,10 +201,10 @@
         const performanceChart = new Chart(performanceCtx, {
             type: 'line',
             data: {
-                labels: {!! json_encode($performanceData->pluck('month')) !!},
+                labels: {!! json_encode(array_column($performanceData, 'month')) !!},
                 datasets: [{
                     label: 'Rata-rata Nilai',
-                    data: {!! json_encode($performanceData->pluck('grade')) !!},
+                    data: {!! json_encode(array_column($performanceData, 'grade')) !!},
                     borderColor: 'rgb(59, 130, 246)',
                     backgroundColor: 'rgba(59, 130, 246, 0.1)',
                     tension: 0.4,
@@ -209,7 +217,7 @@
                 scales: {
                     y: {
                         beginAtZero: true,
-                        max: 10
+                        max: 100
                     }
                 },
                 plugins: {
@@ -225,7 +233,7 @@
         const classChart = new Chart(classCtx, {
             type: 'doughnut',
             data: {
-                labels: {!! json_encode($classDistribution->pluck('class_name')) !!},
+                labels: {!! json_encode($classDistribution->pluck('class')) !!},
                 datasets: [{
                     data: {!! json_encode($classDistribution->pluck('student_count')) !!},
                     backgroundColor: [

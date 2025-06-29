@@ -19,10 +19,11 @@ class DashboardController extends Controller
         // Get basic statistics
         $totalStudents = Student::count();
         $totalTeachers = Teacher::count();
-        $activeClasses = Schedule::distinct('class')->count();
+        $totalSubjects = Subject::count();
+        $activeClasses = Student::distinct('class')->count('class');
         
-        // Calculate average grade
-        $averageGrade = Grade::avg('grade') ?? 0;
+        // Calculate average grade (using 'score' field instead of 'grade')
+        $averageGrade = Grade::avg('score') ?? 0;
         
         // Get student growth (comparing last month vs previous month)
         $currentMonth = Carbon::now()->startOfMonth();
@@ -44,7 +45,7 @@ class DashboardController extends Controller
             
             $avgGrade = Grade::whereMonth('created_at', $month->month)
                            ->whereYear('created_at', $month->year)
-                           ->avg('grade') ?? 0;
+                           ->avg('score') ?? 0;
             
             $performanceData[] = [
                 'month' => $monthName,
@@ -52,8 +53,9 @@ class DashboardController extends Controller
             ];
         }
         
-        // Get class distribution data
-        $classDistribution = Schedule::select('class', DB::raw('count(*) as student_count'))
+        // Get class distribution data (using Student's class field)
+        $classDistribution = Student::select('class', DB::raw('count(*) as student_count'))
+            ->whereNotNull('class')
             ->groupBy('class')
             ->get();
         
@@ -71,8 +73,9 @@ class DashboardController extends Controller
                     'icon' => 'fas fa-file-alt',
                     'color' => 'blue',
                     'title' => 'Nilai Baru Ditambahkan',
-                    'description' => "Nilai {$grade->subject->name} untuk {$grade->student->name}: {$grade->grade}",
-                    'time' => $grade->created_at->diffForHumans()
+                    'description' => "Nilai {$grade->subject->name} untuk {$grade->student->name}: {$grade->score}",
+                    'time' => $grade->created_at->diffForHumans(),
+                    'created_at' => $grade->created_at
                 ];
             });
         
@@ -86,8 +89,9 @@ class DashboardController extends Controller
                     'icon' => 'fas fa-user-plus',
                     'color' => 'green',
                     'title' => 'Siswa Baru Terdaftar',
-                    'description' => "{$student->name} telah mendaftar sebagai siswa baru",
-                    'time' => $student->created_at->diffForHumans()
+                    'description' => "{$student->name} (NIS: {$student->nis}) telah mendaftar di kelas {$student->class}",
+                    'time' => $student->created_at->diffForHumans(),
+                    'created_at' => $student->created_at
                 ];
             });
         
@@ -103,31 +107,46 @@ class DashboardController extends Controller
                     'icon' => 'fas fa-check',
                     'color' => 'purple',
                     'title' => 'Kehadiran Tercatat',
-                    'description' => "{$attendance->student->name} hadir di kelas {$attendance->schedule->class}",
-                    'time' => $attendance->created_at->diffForHumans()
+                    'description' => "{$attendance->student->name} hadir pada {$attendance->date}",
+                    'time' => $attendance->created_at->diffForHumans(),
+                    'created_at' => $attendance->created_at
                 ];
             });
         
         $recentActivities = $recentGrades->concat($recentStudents)->concat($recentAttendance)
-            ->sortByDesc('time')
-            ->take(4);
+            ->sortByDesc('created_at')
+            ->take(4)
+            ->values();
         
-        // Get today's schedule
-        $todaySchedule = Schedule::whereDate('date', Carbon::today())
+        // Get today's schedule (using 'day' field and current day)
+        $today = Carbon::now()->format('l'); // Gets full day name like 'Monday'
+        $todaySchedule = Schedule::with(['teacher', 'subject'])
+            ->where('day', $today)
             ->orderBy('start_time')
-            ->take(2)
+            ->take(5)
             ->get();
+        
+        // Get attendance rate
+        $totalAttendanceRecords = Attendance::whereDate('date', '>=', Carbon::now()->subDays(30))->count();
+        $presentRecords = Attendance::where('status', 'present')
+            ->whereDate('date', '>=', Carbon::now()->subDays(30))
+            ->count();
+        
+        $attendanceRate = $totalAttendanceRecords > 0 ? 
+            round(($presentRecords / $totalAttendanceRecords) * 100, 1) : 0;
         
         return view('dashboard', compact(
             'totalStudents',
             'totalTeachers', 
+            'totalSubjects',
             'activeClasses',
             'averageGrade',
             'studentGrowth',
             'performanceData',
             'classDistribution',
             'recentActivities',
-            'todaySchedule'
+            'todaySchedule',
+            'attendanceRate'
         ));
     }
 }
