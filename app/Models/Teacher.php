@@ -9,16 +9,15 @@ class Teacher extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'nip',
-        'subject',
-        'phone',
-        'email'
-    ];
+    protected $fillable = ['name', 'nip', 'subject_id', 'phone', 'email'];
 
     public function schedules()
     {
         return $this->hasMany(Schedule::class);
+    }
+
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class);
     }
 }

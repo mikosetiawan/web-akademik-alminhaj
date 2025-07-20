@@ -59,13 +59,25 @@
                     </a>
                 </li>
 
-                <!-- Data Mata Pelajaran - Admin and Kepala Sekolah only -->
-                @if(in_array(auth()->user()->role, ['admin', 'kepala_sekolah']))
+                <!-- Data Mata Pelajaran - Admin only -->
+                @if(in_array(auth()->user()->role, ['admin']))
                 <li>
                     <a href="{{ route('subjects.index') }}"
                         class="flex items-center space-x-3 px-3 py-2 {{ request()->routeIs('subjects.*') ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50' }} rounded-lg transition-colors {{ request()->routeIs('subjects.*') ? 'font-medium' : '' }}">
                         <i class="fas fa-book w-5"></i>
                         <span>Data Mata Pelajaran</span>
+                    </a>
+                </li>
+                @endif
+
+
+                <!-- Data Kelas - Admin -->
+                @if(in_array(auth()->user()->role, ['admin']))
+                <li>
+                    <a href="{{ route('classes.index') }}"
+                        class="flex items-center space-x-3 px-3 py-2 {{ request()->routeIs('classes.*') ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50' }} rounded-lg transition-colors {{ request()->routeIs('subjects.*') ? 'font-medium' : '' }}">
+                        <i class="fas fa-book w-5"></i>
+                        <span>Data Kelas</span>
                     </a>
                 </li>
                 @endif

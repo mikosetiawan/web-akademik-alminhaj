@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Teacher;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 
 class TeacherController extends Controller
@@ -15,7 +16,8 @@ class TeacherController extends Controller
 
     public function create()
     {
-        return view('teachers.create');
+        $subjects = Subject::all();
+        return view('teachers.create', compact('subjects'));
     }
 
     public function store(Request $request)
@@ -23,7 +25,7 @@ class TeacherController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'nip' => 'required|unique:teachers,nip',
-            'subject' => 'required|string|max:100',
+            'subject_id' => 'required|exists:subjects,id',
             'phone' => 'required|string|max:20',
             'email' => 'required|email|unique:teachers,email',
         ]);
@@ -39,7 +41,8 @@ class TeacherController extends Controller
 
     public function edit(Teacher $teacher)
     {
-        return view('teachers.edit', compact('teacher'));
+        $subjects = Subject::all();
+        return view('teachers.edit', compact('teacher', 'subjects'));
     }
 
     public function update(Request $request, Teacher $teacher)
@@ -47,7 +50,7 @@ class TeacherController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'nip' => 'required|unique:teachers,nip,'.$teacher->id,
-            'subject' => 'required|string|max:100',
+            'subject_id' => 'required|exists:subjects,id',
             'phone' => 'required|string|max:20',
             'email' => 'required|email|unique:teachers,email,'.$teacher->id,
         ]);

@@ -11,13 +11,13 @@ return new class extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('teacher_id')->constrained()->onDelete('cascade'); // ID guru dengan relasi ke tabel teachers
-            $table->foreignId('subject_id')->constrained()->onDelete('cascade'); // Mata pelajaran
-            $table->enum('day', ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']); // Hari dalam seminggu
-            $table->time('start_time'); // Waktu mulai
-            $table->time('end_time'); // Waktu selesai
-            $table->string('classroom')->nullable(); // Ruang kelas (opsional)
-            $table->timestamps(); // Kolom created_at dan updated_at
+            $table->foreignId('teacher_id')->constrained('teachers')->onDelete('cascade');
+            $table->foreignId('subject_id')->constrained('subjects')->onDelete('cascade');
+            $table->foreignId('class_id')->constrained('classes')->onDelete('cascade');
+            $table->enum('day', ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']);
+            $table->time('start_time');
+            $table->time('end_time');
+            $table->timestamps();
         });
     }
 
