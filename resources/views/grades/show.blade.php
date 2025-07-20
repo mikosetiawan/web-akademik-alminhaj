@@ -9,7 +9,7 @@
             </div>
             <div class="mb-4">
                 <h2 class="text-lg font-medium text-gray-700">Mata Pelajaran</h2>
-                <p class="text-gray-600">{{ $grade->subject }}</p>
+                <p class="text-gray-600">{{ $grade->subject->name }}</p>
             </div>
             <div class="mb-4">
                 <h2 class="text-lg font-medium text-gray-700">Nilai</h2>

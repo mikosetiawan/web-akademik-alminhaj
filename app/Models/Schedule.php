@@ -11,11 +11,11 @@ class Schedule extends Model
 
     protected $fillable = [
         'teacher_id',
-        'subject_id', // Change from 'subject' to 'subject_id'
+        'subject_id',
+        'class_id',
         'day',
         'start_time',
         'end_time',
-        'classroom'
     ];
 
     public function teacher()
@@ -25,7 +25,12 @@ class Schedule extends Model
 
     public function subject()
     {
-        return $this->belongsTo(Subject::class); // Add relationship to Subject
+        return $this->belongsTo(Subject::class);
+    }
+
+    public function class()
+    {
+        return $this->belongsTo(ClassModel::class, 'class_id');
     }
 
     public function students()

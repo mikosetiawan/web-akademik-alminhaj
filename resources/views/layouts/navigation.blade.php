@@ -14,7 +14,12 @@
                             </button>
                         </div> --}}
             <div class="flex items-center space-x-3">
-                <img src="{{ asset('assets/img/user.png') }}" alt="Profile" class="rounded-full" style="width: 40px;">
+                @if (auth()->user()->photo)
+                    <img src="{{ Storage::url(auth()->user()->photo) }}" alt="Profile" class="rounded-full" style="width: 40px;">
+                @else
+                    <img src="{{ asset('assets/img/user.png') }}" alt="Profile" class="rounded-full" style="width: 40px;">
+                @endif
+              
                 <div>
                     <p class="font-semibold text-gray-800">{{ auth()->user()->name }}</p>
                     <p class="text-sm text-gray-600">{{ auth()->user()->role }}</p>

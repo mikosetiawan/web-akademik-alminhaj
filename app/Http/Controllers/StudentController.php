@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
+use App\Models\ClassModel;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -15,7 +16,8 @@ class StudentController extends Controller
 
     public function create()
     {
-        return view('students.create');
+        $classes = ClassModel::all();
+        return view('students.create', compact('classes'));
     }
 
     public function store(Request $request)
@@ -23,13 +25,13 @@ class StudentController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'nis' => 'required|unique:students,nis',
-            'class' => 'required|string|max:50',
+            'class_id' => 'required|exists:classes,id',
             'birth_date' => 'required|date',
             'address' => 'required|string',
         ]);
 
         Student::create($validated);
-        return redirect()->route('students.index')->with('success', 'Student created successfully');
+        return redirect()->route('students.index')->with('success', 'Siswa berhasil ditambahkan');
     }
 
     public function show(Student $student)
@@ -39,7 +41,8 @@ class StudentController extends Controller
 
     public function edit(Student $student)
     {
-        return view('students.edit', compact('student'));
+        $classes = ClassModel::all();
+        return view('students.edit', compact('student', 'classes'));
     }
 
     public function update(Request $request, Student $student)
@@ -47,18 +50,18 @@ class StudentController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'nis' => 'required|unique:students,nis,'.$student->id,
-            'class' => 'required|string|max:50',
+            'class_id' => 'required|exists:classes,id',
             'birth_date' => 'required|date',
             'address' => 'required|string',
         ]);
 
         $student->update($validated);
-        return redirect()->route('students.index')->with('success', 'Student updated successfully');
+        return redirect()->route('students.index')->with('success', 'Siswa berhasil diperbarui');
     }
 
     public function destroy(Student $student)
     {
         $student->delete();
-        return redirect()->route('students.index')->with('success', 'Student deleted successfully');
+        return redirect()->route('students.index')->with('success', 'Siswa berhasil dihapus');
     }
 }

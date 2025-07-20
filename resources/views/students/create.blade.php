@@ -26,11 +26,16 @@
                 </div>
 
                 <div class="mb-4">
-                    <label for="class" class="block text-sm font-medium text-gray-700">Kelas</label>
-                    <input type="text"
-                        class="mt-1 block w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:outline-none @error('class') border-red-500 @enderror"
-                        id="class" name="class" value="{{ old('class') }}">
-                    @error('class')
+                    <label for="class_id" class="block text-sm font-medium text-gray-700">Kelas</label>
+                    <select
+                        class="mt-1 block w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:outline-none @error('class_id') border-red-500 @enderror"
+                        id="class_id" name="class_id">
+                        <option value="" disabled selected>Pilih Kelas</option>
+                        @foreach ($classes as $class)
+                            <option value="{{ $class->id }}" {{ old('class_id') == $class->id ? 'selected' : '' }}>{{ $class->name }} ({{ $class->code }})</option>
+                        @endforeach
+                    </select>
+                    @error('class_id')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>

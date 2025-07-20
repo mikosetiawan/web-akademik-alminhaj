@@ -33,7 +33,7 @@
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $teacher->name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $teacher->nip }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">{{ $teacher->subject }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ $teacher->subject->name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $teacher->phone }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <a href="{{ route('teachers.show', $teacher) }}"

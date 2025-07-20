@@ -26,11 +26,16 @@
                 </div>
 
                 <div class="mb-4">
-                    <label for="subject" class="block text-sm font-medium text-gray-700">Mata Pelajaran</label>
-                    <input type="text"
-                        class="mt-1 block w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:outline-none @error('subject') border-red-500 @enderror"
-                        id="subject" name="subject" value="{{ old('subject') }}">
-                    @error('subject')
+                    <label for="subject_id" class="block text-sm font-medium text-gray-700">Mata Pelajaran</label>
+                    <select
+                        class="mt-1 block w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:outline-none @error('subject_id') border-red-500 @enderror"
+                        id="subject_id" name="subject_id">
+                        <option value="" disabled {{ old('subject_id') ? '' : 'selected' }}>Pilih Mata Pelajaran</option>
+                        @foreach ($subjects as $subject)
+                            <option value="{{ $subject->id }}" {{ old('subject_id') == $subject->id ? 'selected' : '' }}>{{ $subject->name }}</option>
+                        @endforeach
+                    </select>
+                    @error('subject_id')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>

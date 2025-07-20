@@ -6,22 +6,23 @@ use App\Models\Schedule;
 use App\Models\Teacher;
 use App\Models\Student;
 use App\Models\Subject;
+use App\Models\ClassModel;
 use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
 {
     public function index()
     {
-        $schedules = Schedule::with('teacher', 'subject', 'students')->get();
+        $schedules = Schedule::with('teacher', 'subject', 'students', 'class')->get();
         return view('schedules.index', compact('schedules'));
     }
 
     public function create()
     {
         $teachers = Teacher::all();
-        $students = Student::all();
         $subjects = Subject::all();
-        return view('schedules.create', compact('teachers', 'students', 'subjects'));
+        $classes = ClassModel::all();
+        return view('schedules.create', compact('teachers', 'subjects', 'classes'));
     }
 
     public function store(Request $request)
@@ -29,10 +30,10 @@ class ScheduleController extends Controller
         $validated = $request->validate([
             'teacher_id' => 'required|exists:teachers,id',
             'subject_id' => 'required|exists:subjects,id',
+            'class_id' => 'required|exists:classes,id',
             'day' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu',
             'start_time' => 'required',
             'end_time' => 'required|after:start_time',
-            'classroom' => 'required|string|max:50',
             'students' => 'nullable|array',
             'students.*' => 'exists:students,id',
         ]);
@@ -47,16 +48,16 @@ class ScheduleController extends Controller
 
     public function show(Schedule $schedule)
     {
-        $schedule->load('teacher', 'students');
+        $schedule->load('teacher', 'students', 'subject', 'class');
         return view('schedules.show', compact('schedule'));
     }
 
     public function edit(Schedule $schedule)
     {
         $teachers = Teacher::all();
-        $students = Student::all();
         $subjects = Subject::all();
-        return view('schedules.edit', compact('schedule', 'teachers', 'students', 'subjects'));
+        $classes = ClassModel::all();
+        return view('schedules.edit', compact('schedule', 'teachers', 'subjects', 'classes'));
     }
 
     public function update(Request $request, Schedule $schedule)
@@ -64,10 +65,10 @@ class ScheduleController extends Controller
         $validated = $request->validate([
             'teacher_id' => 'required|exists:teachers,id',
             'subject_id' => 'required|exists:subjects,id',
+            'class_id' => 'required|exists:classes,id',
             'day' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu',
             'start_time' => 'required',
             'end_time' => 'required|after:start_time',
-            'classroom' => 'required|string|max:50',
             'students' => 'nullable|array',
             'students.*' => 'exists:students,id',
         ]);

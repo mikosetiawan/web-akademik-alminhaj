@@ -44,7 +44,8 @@
                                 @foreach ($subjects as $subject)
                                     <option value="{{ $subject->id }}"
                                         {{ old('subject_id') == $subject->id ? 'selected' : '' }}>{{ $subject->name }}
-                                        ({{ $subject->code }})</option>
+                                        ({{ $subject->code }})
+                                    </option>
                                 @endforeach
                             </select>
                             <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
@@ -57,6 +58,35 @@
                         </div>
                     </div>
                     @error('subject_id')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="mb-4 relative">
+                    <label for="class_id" class="block text-sm font-medium text-gray-700">Kelas</label>
+                    <div class="mt-1">
+                        <div class="relative">
+                            <select
+                                class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 appearance-none focus:border-blue-300 focus:ring focus:ring-blue-200 focus:outline-none @error('class_id') border-red-500 @enderror"
+                                id="class_id" name="class_id">
+                                <option value="">Pilih Kelas</option>
+                                @foreach ($classes as $class)
+                                    <option value="{{ $class->id }}"
+                                        {{ old('class_id') == $class->id ? 'selected' : '' }}>{{ $class->name }}
+                                        ({{ $class->code }})
+                                    </option>
+                                @endforeach
+                            </select>
+                            <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                                <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                    @error('class_id')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
@@ -127,16 +157,6 @@
                     @enderror
                 </div>
 
-                <div class="mb-4">
-                    <label for="classroom" class="block text-sm font-medium text-gray-700">Ruang Kelas</label>
-                    <input type="text"
-                        class="mt-1 block w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:outline-none @error('classroom') border-red-500 @enderror"
-                        id="classroom" name="classroom" value="{{ old('classroom') }}">
-                    @error('classroom')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
                 <div class="mb-4 relative">
                     <label for="students" class="block text-sm font-medium text-gray-700">Siswa</label>
                     <div class="mt-1">
@@ -155,15 +175,7 @@
                             </button>
                             <div id="students-dropdown"
                                 class="absolute z-10 mt-1 hidden w-full rounded-md bg-white shadow-lg max-h-60 overflow-auto">
-                                @foreach ($students as $student)
-                                    <label class="flex items-center px-4 py-2 hover:bg-gray-100">
-                                        <input type="checkbox" name="students[]" value="{{ $student->id }}"
-                                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                                            {{ in_array($student->id, old('students', [])) ? 'checked' : '' }}
-                                            onchange="updateSelectedStudents()">
-                                        <span class="ml-2 text-sm text-gray-700">{{ $student->name }}</span>
-                                    </label>
-                                @endforeach
+                                <!-- Students will be populated dynamically -->
                             </div>
                         </div>
                     </div>
@@ -201,12 +213,38 @@
             dropdown.classList.toggle('hidden');
         });
 
-        // Close dropdown when clicking outside
         document.addEventListener('click', (e) => {
             const toggle = document.getElementById('students-toggle');
             const dropdown = document.getElementById('students-dropdown');
             if (!toggle.contains(e.target) && !dropdown.contains(e.target)) {
                 dropdown.classList.add('hidden');
+            }
+        });
+
+        document.getElementById('class_id').क्ष
+
+        document.getElementById('class_id').addEventListener('change', function() {
+            const classId = this.value;
+            const studentsDropdown = document.getElementById('students-dropdown');
+            studentsDropdown.innerHTML = ''; // Clear existing students
+
+            if (classId) {
+                fetch(`/classes/${classId}/students`)
+                    .then(response => response.json())
+                    .then(students => {
+                        students.forEach(student => {
+                            const label = document.createElement('label');
+                            label.className = 'flex items-center px-4 py-2 hover:bg-gray-100';
+                            label.innerHTML = `
+                                <input type="checkbox" name="students[]" value="${student.id}"
+                                    class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                    onchange="updateSelectedStudents()">
+                                <span class="ml-2 text-sm text-gray-700">${student.name}</span>
+                            `;
+                            studentsDropdown.appendChild(label);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching students:', error));
             }
         });
 

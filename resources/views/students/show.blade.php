@@ -13,7 +13,7 @@
             </div>
             <div class="mb-4">
                 <h2 class="text-lg font-medium text-gray-700">Kelas</h2>
-                <p class="text-gray-600">{{ $student->class }}</p>
+                <p class="text-gray-600">{{ $student->class->name }}</p>
             </div>
             <div class="mb-4">
                 <h2 class="text-lg font-medium text-gray-700">Tanggal Lahir</h2>

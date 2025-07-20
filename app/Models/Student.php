@@ -12,10 +12,15 @@ class Student extends Model
     protected $fillable = [
         'name',
         'nis',
-        'class',
+        'class_id',
         'birth_date',
         'address'
     ];
+
+    public function class()
+    {
+        return $this->belongsTo(ClassModel::class, 'class_id');
+    }
 
     public function attendances()
     {

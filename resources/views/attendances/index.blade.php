@@ -21,17 +21,23 @@
                     <table id="attendancesTable" class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Siswa</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Jadwal</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Tanggal</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Status</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Catatan</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Aksi</th>
                             </tr>
                         </thead>
@@ -43,7 +49,7 @@
                                             {{ $attendance->student->name }}
                                         </div>
                                         <div class="text-sm text-gray-500">
-                                            {{ $attendance->student->class ?? 'N/A' }}
+                                            {{ $attendance->student->class->name ?? 'N/A' }}
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
@@ -51,8 +57,9 @@
                                             {{ $attendance->schedule->subject->name }}
                                         </div>
                                         <div class="text-sm text-gray-500">
-                                            {{ $attendance->schedule->teacher->name }} 
-                                            ({{ $attendance->schedule->day }} {{ $attendance->schedule->start_time }}-{{ $attendance->schedule->end_time }})
+                                            {{ $attendance->schedule->teacher->name }}
+                                            ({{ $attendance->schedule->day }}
+                                            {{ $attendance->schedule->start_time }}-{{ $attendance->schedule->end_time }})
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -64,10 +71,11 @@
                                                 'Hadir' => 'bg-green-100 text-green-800',
                                                 'Tidak Hadir' => 'bg-red-100 text-red-800',
                                                 'Terlambat' => 'bg-yellow-100 text-yellow-800',
-                                                'Izin' => 'bg-blue-100 text-blue-800'
+                                                'Izin' => 'bg-blue-100 text-blue-800',
                                             ];
                                         @endphp
-                                        <span class="px-2 py-1 text-xs font-semibold rounded-full {{ $statusColors[$attendance->status] ?? 'bg-gray-100 text-gray-800' }}">
+                                        <span
+                                            class="px-2 py-1 text-xs font-semibold rounded-full {{ $statusColors[$attendance->status] ?? 'bg-gray-100 text-gray-800' }}">
                                             {{ $attendance->status }}
                                         </span>
                                     </td>
@@ -86,11 +94,13 @@
                                                 class="bg-yellow-600 hover:bg-yellow-800 text-white p-2 rounded-lg transition duration-200">
                                                 Edit
                                             </a>
-                                            <form action="{{ route('attendances.destroy', $attendance) }}" method="POST"
-                                                class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data kehadiran ini?')">
+                                            <form action="{{ route('attendances.destroy', $attendance) }}"
+                                                method="POST" class="inline"
+                                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus data kehadiran ini?')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="bg-red-600 hover:bg-red-800 text-white p-2 rounded-lg transition duration-200">
+                                                <button type="submit"
+                                                    class="bg-red-600 hover:bg-red-800 text-white p-2 rounded-lg transition duration-200">
                                                     Hapus
                                                 </button>
                                             </form>
@@ -111,7 +121,7 @@
         </div>
     </div>
 
-       <script>
+    <script>
         $(document).ready(function() {
             $('#attendancesTable').DataTable({
                 responsive: true,

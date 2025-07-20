@@ -33,7 +33,7 @@
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $student->name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $student->nis }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">{{ $student->class }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ $student->class->name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $student->birth_date }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <a href="{{ route('students.show', $student) }}"
