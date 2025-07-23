@@ -8,12 +8,14 @@
             </div>
         @endif
 
-        <div class="mb-6">
-            <a href="{{ route('attendances.create') }}"
-                class="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-200">
-                Tambah Kehadiran Baru
-            </a>
-        </div>
+        @if (auth()->user()->role === 'guru')
+            <div class="mb-6">
+                <a href="{{ route('attendances.create') }}"
+                    class="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-200">
+                    Tambah Kehadiran Baru
+                </a>
+            </div>
+        @endif
 
         <div class="bg-white shadow-md rounded-lg overflow-hidden">
             <div class="p-6">

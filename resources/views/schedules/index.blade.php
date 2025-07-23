@@ -8,9 +8,11 @@
             </div>
         @endif
 
-        <a href="{{ route('schedules.create') }}"
-            class="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 mb-6">Tambah Jadwal
-            Baru</a>
+        @if (in_array(auth()->user()->role, ['admin']))
+            <a href="{{ route('schedules.create') }}"
+                class="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 mb-6">Tambah Jadwal
+                Baru</a>
+        @endif
 
         <div class="bg-white shadow-md rounded-lg overflow-hidden p-5">
             <div class="overflow-x-auto">

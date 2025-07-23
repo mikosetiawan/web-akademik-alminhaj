@@ -8,8 +8,11 @@
             </div>
         @endif
 
-        <a href="{{ route('grades.create') }}"
-            class="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 mb-6">Tambah Nilai Baru</a>
+        @if (in_array(auth()->user()->role, ['guru', 'wali_kelas']))
+            <a href="{{ route('grades.create') }}"
+                class="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 mb-6">Tambah Nilai
+                Baru</a>
+        @endif
 
         <div class="bg-white shadow-md rounded-lg overflow-hidden p-5">
             <div class="overflow-x-auto">
@@ -43,7 +46,8 @@
                                     <form action="{{ route('grades.destroy', $grade) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="bg-red-600 hover:bg-red-800 text-white p-2 rounded-lg"
+                                        <button type="submit"
+                                            class="bg-red-600 hover:bg-red-800 text-white p-2 rounded-lg"
                                             onclick="return confirm('Apakah Anda yakin?')">Hapus</button>
                                     </form>
                                 </td>
