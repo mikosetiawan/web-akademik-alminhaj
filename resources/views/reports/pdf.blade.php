@@ -20,8 +20,8 @@
 <body>
     <div class="header">
         <img src="{{ public_path('assets/img/alminhaj.png') }}" class="logo" alt="Logo Sekolah">
-        <h1>MTS AL-MINHAJ CILEGON</h1>
-        <p>Jl. Raya Cibeber No. 123, Cilegon</p>
+        <h1>SMK AL-FIKRI CILEGON</h1>
+        <p>Jl. CIlegon raya No. 123, Cilegon</p>
         <p>Laporan {{ ucfirst($reportType) }}</p>
     </div>
     

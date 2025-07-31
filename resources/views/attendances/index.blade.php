@@ -8,7 +8,7 @@
             </div>
         @endif
 
-        @if (auth()->user()->role === 'guru')
+        @if (in_array(auth()->user()->role, ['guru', 'admin']))
             <div class="mb-6">
                 <a href="{{ route('attendances.create') }}"
                     class="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-200">

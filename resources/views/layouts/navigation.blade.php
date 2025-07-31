@@ -3,7 +3,7 @@
     <div class="flex items-center justify-between">
         <div>
             <h1 class="text-2xl font-bold text-gray-800">Dashboard Akademik</h1>
-            <p class="text-gray-600">Selamat datang di sistem akademik MTS Al-Minhaj Cilegon</p>
+            <p class="text-gray-600">Selamat datang di sistem akademik SMK Al-Fikri Cilegon</p>
         </div>
         <div class="flex items-center space-x-4">
             {{-- <div class="relative">
@@ -15,11 +15,13 @@
                         </div> --}}
             <div class="flex items-center space-x-3">
                 @if (auth()->user()->photo)
-                    <img src="{{ Storage::url(auth()->user()->photo) }}" alt="Profile" class="rounded-full" style="width: 40px;">
+                    <img src="{{ Storage::url(auth()->user()->photo) }}" alt="Profile" class="rounded-full"
+                        style="width: 40px;">
                 @else
-                    <img src="{{ asset('assets/img/user.png') }}" alt="Profile" class="rounded-full" style="width: 40px;">
+                    <img src="{{ asset('assets/img/user.png') }}" alt="Profile" class="rounded-full"
+                        style="width: 40px;">
                 @endif
-              
+
                 <div>
                     <p class="font-semibold text-gray-800">{{ auth()->user()->name }}</p>
                     <p class="text-sm text-gray-600">{{ auth()->user()->role }}</p>

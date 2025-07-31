@@ -8,7 +8,7 @@
             </div>
         @endif
 
-        @if (in_array(auth()->user()->role, ['guru', 'wali_kelas']))
+        @if (in_array(auth()->user()->role, ['guru', 'wali_kelas','admin']))
             <a href="{{ route('grades.create') }}"
                 class="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 mb-6">Tambah Nilai
                 Baru</a>
